@@ -36,7 +36,7 @@
     <div>
       <!-- <button onClick="refreshData()">Refresh</button> -->
       <h1>Hildegard of Bingen N=1 Clinical Trial (2023-2024)</h1>
-
+      <div id="medicalEvents"></div>
       <div id="allCharts"></div>
     </div>
     <script>
@@ -55,6 +55,17 @@
           }
         );
       }
+
+      var medicalEvents = [
+        {
+          date: "5/23/2012",
+          name: "Right orchidectomy",
+        },
+        {
+          date: "5/14/2020",
+          name: "Partial left orchidectomy",
+        },
+      ];
 
       var normals = {
         "AFP (ng/mL)": { bounds: [["<", 10]], unit: "ng/mL" },
@@ -743,10 +754,10 @@
         newCanvas.className = "lineChart";
         document.getElementById("allCharts").appendChild(newCanvas);
         var ctx = newCanvas.getContext("2d");
-        var normalValuesAnnotations = {};
+        var allGraphAnnotations = {};
         var annotationLineId = 0;
         normals[markerName].bounds.forEach(function (bound) {
-          normalValuesAnnotations["normalLine" + annotationLineId++] = {
+          allGraphAnnotations["normalLine" + annotationLineId++] = {
             type: "line",
             yMin: bound[1],
             yMax: bound[1],
@@ -759,7 +770,24 @@
             borderWidth: 2,
           };
         });
-        console.log(normalValuesAnnotations);
+        annotationLineId = 0;
+        medicalEvents.forEach(function (medicalEvent) {
+          allGraphAnnotations["medicalEventLine" + annotationLineId++] = {
+            type: "line",
+            drawTime: "afterDatasetsDraw",
+            xMin: medicalEvent.date,
+            xMax: medicalEvent.date,
+            mode: "vertical",
+            label: {
+              display: true,
+              content: medicalEvent.name
+            },
+            borderColor: "rgb(99, 99, 132, 0.5)",
+            borderWidth: 10,
+          };
+        });
+
+        console.log(allGraphAnnotations);
         var newChart = new Chart(ctx, {
           plugins: [ChartDataLabels],
           type: "line",
@@ -777,7 +805,7 @@
                 },
               },
               annotation: {
-                annotations: normalValuesAnnotations,
+                annotations: allGraphAnnotations,
               },
             },
           },
