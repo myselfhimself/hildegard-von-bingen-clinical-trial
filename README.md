@@ -4,6 +4,10 @@ Tools for better display of an ongoing N=1 natural medicine clinical trial's res
 - treatments (coming soon),
 - blood markers.
 
+Public page is at: https://myselfhimself.github.io/hildegard-von-bingen-clinical-trial
+
+It is intended for world audience among cancer researchers and Hildegard of Bingen therapists and afficionados.
+
 The trial has started in August 2023.
 
 Data comes from a private Google Spreadsheet.
