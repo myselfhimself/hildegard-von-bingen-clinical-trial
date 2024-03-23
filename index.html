@@ -15,11 +15,20 @@
       integrity="sha256-8BDDxChCyYOB80/6VhOpmr7qI5EIDyDPzxsWePPFVfo="
       crossorigin="anonymous"
     ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"
+      integrity="sha256-UDxwmAK+KFxnav4Dab9fcgZtCwwjkpGIwxWPNcAyepw="
+      crossorigin="anonymous"
+    ></script>
     <style>
       .lineChart {
         position: relative;
         height: 40vh;
         width: 80vw;
+      }
+      .controls {
+        display: flex;
+        align-items: center;
       }
     </style>
   </head>
@@ -27,7 +36,7 @@
     <div>
       <!-- <button onClick="refreshData()">Refresh</button> -->
       <h1>Hildegard of Bingen N=1 Clinical Trial (2023-2024)</h1>
-      
+
       <div id="allCharts"></div>
     </div>
     <script>
@@ -69,7 +78,6 @@
           bounds: [["<", 0.1]],
           unit: "UI/L",
         },
-
         "Testosterone (ng/mL)": {
           bounds: [
             [">", 2.5],
@@ -693,6 +701,25 @@
 
       Chart.register(ChartDataLabels);
 
+      const zoomOptions = {
+        pan: {
+          enabled: true,
+          mode: "xy",
+          modifierKey: "ctrl",
+        },
+        zoom: {
+          mode: "xy",
+          drag: {
+            enabled: true,
+            borderColor: "rgb(54, 162, 235)",
+            borderWidth: 1,
+            backgroundColor: "rgba(54, 162, 235, 0.3)",
+          },
+        },
+      };
+
+      var chartObjects = [];
+
       function drawChart(markerName) {
         console.log("drawing" + markerName);
         var chartData = {
@@ -733,7 +760,7 @@
           };
         });
         console.log(normalValuesAnnotations);
-        var myLine = new Chart(ctx, {
+        var newChart = new Chart(ctx, {
           plugins: [ChartDataLabels],
           type: "line",
           data: chartData,
@@ -742,6 +769,7 @@
             showTooltips: true,
             responsive: true,
             plugins: {
+              zoom: zoomOptions,
               datalabels: {
                 color: "#202328",
                 font: {
@@ -754,10 +782,26 @@
             },
           },
         });
+        chartObjects.push(newChart);
+        var newControls = document.createElement("div");
+        newControls.className = "controls";
+        var newResetZoomButton = document.createElement("button");
+        newResetZoomButton.innerHTML = "Reset zoom";
+        newResetZoomButton.onclick = function () {
+          newChart.resetZoom();
+        };
+        var newZoomDragHint = document.createElement("p");
+        newZoomDragHint.innerText = "Drag to zoom, CTRL to pan.";
+        newControls.appendChild(newResetZoomButton);
+        newControls.appendChild(newZoomDragHint);
+        newCanvas.after(newControls);
       }
 
       function drawAllCharts() {
         document.getElementById("allCharts").replaceChildren();
+        while (chartObjects.length) {
+          chartObjects.pop();
+        }
         Object.keys(sheetData[0]).forEach(function (value) {
           if (!["Date", "Comment", "Laboratory"].includes(value)) {
             drawChart(value);
