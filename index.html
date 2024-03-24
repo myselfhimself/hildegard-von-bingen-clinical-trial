@@ -764,7 +764,7 @@
             label: {
               display: true,
               content:
-                "normal " + bound.join(" ") + " " + normals[markerName].unit,
+                "Normal " + bound.join(" ") + " " + normals[markerName].unit,
             },
             borderColor: "rgb(255, 99, 132)",
             borderWidth: 2,
@@ -780,7 +780,8 @@
             mode: "vertical",
             label: {
               display: true,
-              content: medicalEvent.name
+              content: medicalEvent.name,
+              rotation: 90
             },
             borderColor: "rgb(99, 99, 132, 0.5)",
             borderWidth: 10,
