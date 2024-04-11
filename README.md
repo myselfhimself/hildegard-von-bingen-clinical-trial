@@ -4,17 +4,17 @@ Tools for better display of an ongoing N=1 natural medicine clinical trial's res
 - treatments (coming soon),
 - blood markers.
 
-Public page is at: https://myselfhimself.github.io/hildegard-von-bingen-clinical-trial
+Public page is at: https://myselfhimself.github.io/hildegard-von-bingen-clinical-trial (add #refresh for fresh data).
 
 It is intended for world audience among cancer researchers and Hildegard of Bingen therapists and afficionados.
 
 The trial has started in August 2023.
 
-Data comes from a private Google Spreadsheet.
+Data comes from a Google Spreadsheet.
 Rows have been feed by hand and/or through a Google Forms (the patient enters there daily treatments taken).
 
 The clinical trial follows a weekly serology measurement, crossed with windows of at least 2 weeks of unchanged protocol. This is gives a hint of which protocol works best if ever it works.
-Lack of sleep and high stress are unfortunately not noted down for the periods, even though they have been occuring often during the trial. Those situations create validation decision noise, preventing to establish whether the treatments would work at all, on patients with same pathological status.
+Lack of sleep and high stress are unfortunately not noted down for the periods, even though they have been occurring often during the trial. Those situations create validation decision noise, preventing to establish whether the treatments would work at all, on patients with same pathological status.
 
 Science tags: cancer, testicle, testicular, natural medicine, chemotherapy.
 
@@ -47,9 +47,13 @@ Not written down: eating meals containing spelt (Triticum spelta or Triticum mon
 - ChartJS v4
 - SheetDB JS client
 
+# Tools
+You may run a dumper to regenerate `sheetData.js`: `cd util; run grabLatestSheetData.js`.
+This makes new cache that ought to be pushed upstream. Visiting the web page's URL with the `#refresh` hash does the same job within the browser.
+
 # Anonymity
 The N=1 patient identity is undisclosed.
 For more data, or any question, please create a Github issue or contact the developer.
 
 # License
-MIT License
+CC0 License - similar to Public domain
