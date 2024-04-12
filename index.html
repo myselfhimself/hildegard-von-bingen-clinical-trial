@@ -41,9 +41,9 @@
     </div>
     <script src="sheetData.js"></script>
     <script>
-      if(typeof sheetData == "undefined") {
+      if(typeof serologyraw == "undefined") {
         alert("Missing sheetData, sheetData.js most probably could not load!");
-        var sheetData = [];
+        var serologyraw = [];
       }
       function refreshData() {
         SheetDB.read("https://sheetdb.io/api/v1/xggkxm7zt5v0t", {
@@ -51,8 +51,8 @@
           limit: 0,
         }).then(
           function (result) {
-            sheetData = result;
-            console.log(sheetData);
+            serologyraw = result;
+            console.log(serologyraw);
             drawAllCharts();
           },
           function (error) {
@@ -131,7 +131,7 @@
       function drawChart(markerName) {
         console.log("drawing" + markerName);
         var chartData = {
-          labels: sheetData.map(function (value) {
+          labels: serologyraw.map(function (value) {
             return value.Date;
           }),
           datasets: [
@@ -139,7 +139,7 @@
               label: markerName,
               fillColor: "transparent", //"#79D1CF",
               strokeColor: "#79D1CF",
-              data: sheetData.map(function (value) {
+              data: serologyraw.map(function (value) {
                 let i = value[markerName];
                 return i == "" ? null : i;
               }),
@@ -233,7 +233,7 @@
         while (chartObjects.length) {
           chartObjects.pop();
         }
-        Object.keys(sheetData[0]).forEach(function (value) {
+        Object.keys(serologyraw[0]).forEach(function (value) {
           if (!["Date", "Comment", "Laboratory"].includes(value)) {
             drawChart(value);
           }

@@ -49,7 +49,7 @@ Not written down: eating meals containing spelt (Triticum spelta or Triticum mon
 
 # Tools
 You may run a dumper to regenerate `sheetData.js`: `cd util; node grabLatestSheetData.js`.
-This makes new cache that ought to be pushed upstream. Visiting the web page's URL with the `#refresh` hash does the same job within the browser.
+This makes new cache that ought to be committed upstream. Visiting the web page's URL with the `#refresh` hash does the same job within the browser.
 
 # Anonymity
 The N=1 patient identity is undisclosed.
