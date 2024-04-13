@@ -11,7 +11,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}/util/grabLatestSheetData.js",
+            "program": "${workspaceFolder}/config.js",
             "env": {
                 "NODE_TLS_REJECT_UNAUTHORIZED": "0"
             }

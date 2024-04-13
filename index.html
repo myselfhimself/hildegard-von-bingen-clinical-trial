@@ -9,7 +9,9 @@
     <link rel="stylesheet" href="" />
     <script src="https://sheetdb.io/api/js"></script>
     <script src=" https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js "></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/luxon@^2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@^1"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script
       src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"
       integrity="sha256-8BDDxChCyYOB80/6VhOpmr7qI5EIDyDPzxsWePPFVfo="
@@ -30,17 +32,25 @@
         display: flex;
         align-items: center;
       }
+      .periodDescription {
+        background-color: aqua;
+      }
     </style>
   </head>
   <body>
     <div>
       <!-- <button onClick="refreshData()">Refresh</button> ; discarded in favor of #refresh URL -->
       <h1>Hildegard of Bingen N=1 Clinical Trial (2023-2024)</h1>
-      <div id="medicalEvents"></div>
+      <h3>Trial periods (time windows)</h3>
+      <div id="periods"></div>
+      <hr />
+      <h3>Marker values x periods</h3>
+
       <div id="allCharts"></div>
     </div>
     <script src="generated/sheetData.js"></script>
     <script src="config.js"></script>
     <script src="drawCharts.js"></script>
+    <script src="writeRecords.js"></script>
   </body>
 </html>

@@ -24,6 +24,10 @@ function refreshDataForTab(tabConfig) {
     );
 }
 
+function toChartJsDate(str) {
+    return luxon.DateTime.fromFormat(str, 'M/d/y').toISO();
+}
+
 function refreshDataAndRedrawAll() {
     TABS.map(refreshDataForTab);
     drawAllCharts();
@@ -56,11 +60,11 @@ function drawChart(markerName) {
     // Draw serology as lines
     var chartData = {
         labels: sheetData.serology.map(function (value) {
-            return value.Date;
+            return toChartJsDate(value.Date);
         }),
         datasets: [
             {
-                label: markerName,
+                label: `${markerName} (${sheetData.refRanges.find(function(refRange){return refRange.Marker == markerName;}).Unit})`,
                 fillColor: "transparent", //"#79D1CF",
                 strokeColor: "#79D1CF",
                 data: sheetData.serology.map(function (value) {
@@ -80,10 +84,10 @@ function drawChart(markerName) {
     // Draw blood marker normal values (aka. reference ranges) horizontal lines
     var annotationLineId = 0;
     console.log("grabbing refrange for marker " + markerName);
-    var markerRefRange = sheetData.refRanges.find(function (refRange) { return refRange.Marker == markerName;});
+    var markerRefRange = sheetData.refRanges.find(function (refRange) { return refRange.Marker == markerName; });
     ["Upper", "Lower"].forEach(function (bound) {
         // Skip empty bound
-        if(markerRefRange[bound + " bound"].trim().length == 0) { return; }
+        if (markerRefRange[bound + " bound"].trim().length == 0) { return; }
         // Draw non-empty bound
         allGraphAnnotations["refRangeLine" + markerName + annotationLineId++] = {
             type: "line",
@@ -106,16 +110,15 @@ function drawChart(markerName) {
         allGraphAnnotations["periodBox" + annotationLineId++] = {
             type: "box",
             drawTime: "beforeDatasetsDraw",
-            backgroundColor: 'rgba(255, 99, 132, 0.25)',
-            xMin: period["Start date"],
-            xMax: period["End date"],
+            backgroundColor: stringToColor(period.ID),
+            xMin: toChartJsDate(period["Start date"]),
+            xMax: toChartJsDate(period["End date"]),
             label: {
                 display: true,
                 position: "center",
-                content: period.ID
-            },
-            // borderColor: "rgb(99, 99, 132, 0.5)",
-            // borderWidth: 10,
+                content: period.ID,
+                rotation: -90
+            }
         };
     });
 
@@ -125,13 +128,13 @@ function drawChart(markerName) {
         allGraphAnnotations["medicalEventLine" + annotationLineId++] = {
             type: "line",
             drawTime: "afterDatasetsDraw",
-            xMin: medicalEvent.Date,
-            xMax: medicalEvent.Date,
+            xMin: toChartJsDate(medicalEvent.Date),
+            xMax: toChartJsDate(medicalEvent.Date),
             mode: "vertical",
             label: {
                 display: true,
                 content: medicalEvent.Name,
-                rotation: 90
+                rotation: -90
             },
             borderColor: "rgb(99, 99, 132, 0.5)",
             borderWidth: 10,
@@ -146,6 +149,18 @@ function drawChart(markerName) {
         type: "line",
         data: chartData,
         options: {
+            scales: {
+                x: {
+                    type: "timeseries",
+                    time: { tooltipFormat: 'MMMM dd, yyyy' },
+                    adapters: {
+                        date: {
+                            zone: 'UTC+1',
+                            locale: 'en-GB'
+                        }
+                    }
+                },
+            },
             spanGaps: false,
             showTooltips: true,
             responsive: true,

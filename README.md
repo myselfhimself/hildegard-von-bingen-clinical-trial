@@ -1,7 +1,7 @@
 # Hildegard von Bingen Clinical Trial
 
 Tools for better display of an ongoing N=1 natural medicine clinical trial's results:
-- treatments (coming soon),
+- treatment periods (work in progress),
 - blood markers.
 
 Public page is at: https://myselfhimself.github.io/hildegard-von-bingen-clinical-trial (add #refresh for fresh data).
@@ -45,6 +45,7 @@ Not written down: eating meals containing spelt (Triticum spelta or Triticum mon
 
 # Technical stack
 - ChartJS v4
+- Luxon ChartJS Adapter
 - SheetDB JS client
 
 # Tools
