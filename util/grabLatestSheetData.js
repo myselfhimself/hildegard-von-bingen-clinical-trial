@@ -1,37 +1,28 @@
-// Run this with node.js in a console
+/**
+ * Grabs SheetDB data and dumps into a single JS file for the HTML page to consume and draw charts from.
+ * 
+ * Run this without any additional command-line parameters using NodeJS version >=21.
+ */
 const fs = require('fs');
 const path = require('path');
+const config = require('../config.js');
 
-const FILE_TO_DUMP = path.resolve(__dirname, '..', 'sheetData.js');
+const FILE_TO_DUMP = path.resolve(__dirname, '..', 'generated', 'sheetData.js');
 
-const API_ID = 'xggkxm7zt5v0t';
-
-const TABS = [
-  {
-    tabId: 'SEROLOGYRAW',
-    comment: (data) => {
-      let lastBloodMarkerDate = data.length > 0 ? data[data.length - 1]?.Date : "unknown";
-      return `Last blood-marker date: ${lastBloodMarkerDate}`;
-    }
-  },
-  {
-    tabId: "PERIODSRAW",
-    comment: (data) => {
-      let lastPeriodEndDate = data.length > 0 ? data[data.length - 1]?.["End date"] : "unknown";
-      return `Last period end date: ${lastPeriodEndDate}`;
-    }
-  }
-];
-
-// Credit: https://medium.com/@jmatix/wonderful-one-liners-in-js-part-i-1ed6eb1d1da4
-const sheetTabNameToMachineName = (str) => str.toLowerCase().replace(/_+(.)/g, (m, g1) => { return g1.toUpperCase() });
-
-const sheetTabsToData = async (apiKey, tabConfigs) => {
+/**
+ * Grab raw for multiple sheet tabs from Sheet DB only API.
+ */
+const sheetTabsToData = async (apiKey, tabConfigs, globalVariableName) => {
 
   let jsCodeBlocksToDump = [];
   let successfullyPreparedTabs = [];
 
   let finalResult = {};
+
+  let availableKeys = tabConfigs.map((tabConfig) => `'${tabConfig.jsKey}'`).join(", ");
+  jsCodeBlocksToDump.push(`/* Content automatically generated with ${path.basename(__filename)} on ${new Date().toString()}.*/`);
+  jsCodeBlocksToDump.push(`/* Load this into your main JS file, it will provide a global 'sheetData' object variable with keys: ${availableKeys}. */`);
+  jsCodeBlocksToDump.push(`if(typeof sheetData == "undefined") {var sheetData = [];}`);
 
   return Promise.all(tabConfigs.map(async (tabConfig) => {
     let url = `https://sheetdb.io/api/v1/${apiKey}?sort_by=id&sort_order=desc&limit=0&sheet=${tabConfig.tabId}`;
@@ -39,8 +30,7 @@ const sheetTabsToData = async (apiKey, tabConfigs) => {
     return await fetch(url)
       .then((response) => response.json())
       .then((data) => {
-        let globalVariableName = sheetTabNameToMachineName(tabConfig.tabId);
-        let jsCodeBlock = `/* ${tabConfig.comment(data)} */ var ${globalVariableName} = ${JSON.stringify(data)};`;
+        let jsCodeBlock = `/* ${tabConfig.comment(data)} */ ${globalVariableName}["${tabConfig.jsKey}"] = ${JSON.stringify(data)};`;
         jsCodeBlocksToDump.push(jsCodeBlock);
         successfullyPreparedTabs.push(tabConfig.tabId);
       }).catch((error) => {
@@ -53,6 +43,13 @@ const sheetTabsToData = async (apiKey, tabConfigs) => {
   });
 };
 
+/**
+ * Dump all aggregated data to outputFileName JS file.
+ * 
+ * @param object tabConfigs 
+ * @param object sheetsData 
+ * @param string outputFileName 
+ */
 const dumpSheetsData = (tabConfigs, sheetsData, outputFileName) => {
 
   if (sheetsData.code && sheetsData.code.length > 0) {
@@ -68,6 +65,13 @@ const dumpSheetsData = (tabConfigs, sheetsData, outputFileName) => {
   }
 }
 
+const main = () => {
+  sheetTabsToData(config.API_ID, config.TABS, config.GLOBAL_VARIABLE_NAME).then(
+    (sheetsData) => dumpSheetsData(config.TABS, sheetsData, FILE_TO_DUMP)
+  );
+};
+
+// Command line execution entry point
 if (require.main === module) {
-  sheetTabsToData(API_ID, TABS).then((sheetsData) => dumpSheetsData(TABS, sheetsData, FILE_TO_DUMP));
+  main();
 }

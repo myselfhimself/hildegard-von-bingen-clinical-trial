@@ -49,6 +49,7 @@ Not written down: eating meals containing spelt (Triticum spelta or Triticum mon
 
 # Tools
 You may run a dumper to regenerate `sheetData.js`: `cd util; node grabLatestSheetData.js`.
+You will need Node >= 21 providing a native `fetch`, otherwise `npm install node-fetch` and `require` it.
 This makes new cache that ought to be committed upstream. Visiting the web page's URL with the `#refresh` hash does the same job within the browser.
 
 # Anonymity
