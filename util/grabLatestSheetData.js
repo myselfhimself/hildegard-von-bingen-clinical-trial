@@ -30,7 +30,9 @@ const sheetTabsToData = async (apiKey, tabConfigs, globalVariableName) => {
     return await fetch(url)
       .then((response) => response.json())
       .then((data) => {
-        let jsCodeBlock = `/* ${tabConfig.comment(data)} */ ${globalVariableName}["${tabConfig.jsKey}"] = ${JSON.stringify(data)};`;
+        let comment = tabConfig.comment(data) ?? false;
+        let jsCodeBlock = comment ? `/* ${comment} */ ` : "";
+        jsCodeBlock += `${globalVariableName}["${tabConfig.jsKey}"] = ${JSON.stringify(data)};`;
         jsCodeBlocksToDump.push(jsCodeBlock);
         successfullyPreparedTabs.push(tabConfig.tabId);
       }).catch((error) => {

@@ -1,19 +1,20 @@
-
-function sheetTabNameToMachineName(str) {
-    return str.toLowerCase().replace(/_+(.)/g, (m, g1) => { return g1.toUpperCase() });
-}
+/**
+ * Drawing of all charts.
+ * 
+ * You MUST load config.js first to benefit from the latter's global variables.
+ */
 
 if (typeof sheetData == "undefined") {
     alert("Missing sheetData, sheetData.js most probably could not load!");
     var sheetData = [];
 }
-function refreshDataForTab(tabName) {
-    SheetDB.read("https://sheetdb.io/api/v1/" + SHEET_DB_TOKEN, {
-        sheet: tabName,
+function refreshDataForTab(tabConfig) {
+    SheetDB.read("https://sheetdb.io/api/v1/" + API_ID, {
+        sheet: tabConfig.tabId,
         limit: 0,
     }).then(
         function (result) {
-            var safeTabName = sheetTabNameToMachineName(tabName);
+            var safeTabName = tabConfig.jsKey;
             sheetData[safeTabName] = result;
             console.log("retrieved online data: " + safeTabName + ": " + sheetData[safeTabName]);
         },
@@ -24,44 +25,9 @@ function refreshDataForTab(tabName) {
 }
 
 function refreshDataAndRedrawAll() {
-    SHEET_DB_TAB_NAMES.map(refreshDataForTab);
+    TABS.map(refreshDataForTab);
     drawAllCharts();
 }
-
-var normals = {
-    "AFP (ng/mL)": { bounds: [["<", 10]], unit: "ng/mL" },
-    "HCG intact (alpha+beta) (mUI/mL)": {
-        bounds: [["<", 2.7]],
-        unit: "mUI/mL",
-    },
-    "LDH (UI/L)": {
-        bounds: [["<", 246]],
-        unit: "UI/L",
-    },
-    "FSH (UI/L)": {
-        bounds: [["<", 19.3]],
-        unit: "UI/L",
-    },
-    "LH (UI/L)": {
-        bounds: [["<", 8.6]],
-        unit: "UI/L",
-    },
-    "bHCG (ng/mL)": {
-        bounds: [["<", 0.1]],
-        unit: "UI/L",
-    },
-    "Testosterone (ng/mL)": {
-        bounds: [
-            [">", 2.5],
-            ["<", 10],
-        ],
-        unit: "UI/L",
-    }, // https://www.lab-cerba.com/files/live/sites/Cerba/files/documents/FR/0489F.pdf
-    "Cholesterol (mmol/L)": {
-        bounds: [["<", 5.17]],
-        unit: "UI/L",
-    }, // https://www.uptodate.com/contents/high-cholesterol-and-lipids-beyond-the-basics/print
-};
 
 Chart.register(ChartDataLabels);
 
@@ -87,7 +53,7 @@ var chartObjects = [];
 function drawChart(markerName) {
     console.log("drawing" + markerName);
 
-    // Transform serology raw data for marker before display
+    // Draw serology as lines
     var chartData = {
         labels: sheetData.serology.map(function (value) {
             return value.Date;
@@ -111,24 +77,49 @@ function drawChart(markerName) {
     var ctx = newCanvas.getContext("2d");
     var allGraphAnnotations = {};
 
-    // Draw blood marker normal value horizontal lines
+    // Draw blood marker normal values (aka. reference ranges) horizontal lines
     var annotationLineId = 0;
-    normals[markerName].bounds.forEach(function (bound) {
-        allGraphAnnotations["normalLine" + annotationLineId++] = {
+    console.log("grabbing refrange for marker " + markerName);
+    var markerRefRange = sheetData.refRanges.find(function (refRange) { return refRange.Marker == markerName;});
+    ["Upper", "Lower"].forEach(function (bound) {
+        // Skip empty bound
+        if(markerRefRange[bound + " bound"].trim().length == 0) { return; }
+        // Draw non-empty bound
+        allGraphAnnotations["refRangeLine" + markerName + annotationLineId++] = {
             type: "line",
-            yMin: bound[1],
-            yMax: bound[1],
+            yMin: markerRefRange[bound + " bound"],
+            yMax: markerRefRange[bound + " bound"],
             label: {
                 display: true,
                 content:
-                    "Normal " + bound.join(" ") + " " + normals[markerName].unit,
+                    "Normal " + markerRefRange[bound + " comparison"] + " " + markerRefRange[bound + " bound"] + " " + markerRefRange.Unit,
             },
             borderColor: "rgb(255, 99, 132)",
             borderWidth: 2,
         };
     });
 
-    // Draw medical events vertical lines
+    // Draw clinical periods' boxes (areas) annotations
+    var annotationLineId = 0;
+    sheetData.periods.forEach(function (period) {
+        console.log("Drawing period box for: " + period.ID);
+        allGraphAnnotations["periodBox" + annotationLineId++] = {
+            type: "box",
+            drawTime: "beforeDatasetsDraw",
+            backgroundColor: 'rgba(255, 99, 132, 0.25)',
+            xMin: period["Start date"],
+            xMax: period["End date"],
+            label: {
+                display: true,
+                position: "center",
+                content: period.ID
+            },
+            // borderColor: "rgb(99, 99, 132, 0.5)",
+            // borderWidth: 10,
+        };
+    });
+
+    // Draw medical events vertical lines annotations
     annotationLineId = 0;
     sheetData.events.forEach(function (medicalEvent) {
         allGraphAnnotations["medicalEventLine" + annotationLineId++] = {
@@ -149,7 +140,7 @@ function drawChart(markerName) {
 
     console.log(allGraphAnnotations);
 
-    // Draw graph for the current blood marker, with medical events and normal bars
+    // Draw graph for the current blood marker, with medical events, period areas and normal bars
     var newChart = new Chart(ctx, {
         plugins: [ChartDataLabels],
         type: "line",
