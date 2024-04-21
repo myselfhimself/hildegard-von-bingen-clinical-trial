@@ -1,0 +1,31 @@
+name: rebuild-medical-data-cache
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  rebuild-cache:
+    runs-on: ubuntu-latest
+
+    permissions:
+      # Give the default GITHUB_TOKEN write permission to commit and push the changed files back to the repository.
+      contents: write
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.head_ref }}
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 21
+
+    - name: Running cache rebuild
+      run: node util/grabLatestSheetData.js
+
+    - uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: Rebuilding cache from medical database
