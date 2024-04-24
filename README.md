@@ -53,6 +53,11 @@ You may run a dumper to regenerate `sheetData.js`: `cd util; node grabLatestShee
 You will need Node >= 21 providing a native `fetch`, otherwise `npm install node-fetch` and `require` it.
 This makes new cache that ought to be committed upstream. Visiting the web page's URL with the `#refresh` hash does the same job within the browser.
 
+# Bibliography
+- [Lillie EO, Patay B, Diamant J, Issell B, Topol EJ, Schork NJ. The n-of-1 clinical trial: the ultimate strategy for individualizing medicine? Per Med. 2011 Mar;8(2):161-173. doi: 10.2217/pme.11.7. PMID: 21695041; PMCID: PMC3118090.](https://pmc.ncbi.nlm.nih.gov/articles/PMC3118090/)
+- more coming soon (on violet extract, galangal extract vs. cancer & testicles)
+
+
 # Anonymity
 The N=1 patient identity is undisclosed.
 For more data, or any question, please create a Github issue or contact the developer.
