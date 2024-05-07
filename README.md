@@ -63,4 +63,4 @@ The N=1 patient identity is undisclosed.
 For more data, or any question, please create a Github issue or contact the developer.
 
 # License
-CC0 License - similar to Public domain
+CC0 License - similar to Public domain.
