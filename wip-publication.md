@@ -1,7 +1,7 @@
 # In humano stage 1 testicular cancer curing or slow down attempts with natural extracts combinations
 
 > [!TIP]
-> This draft article accompanies an ongoing series of N=1 clinical trials with the same patient on the topic of stage 1 testicular cancer curing or slow down attempt food supplements, especially natural extracts, and more precisely the drug retargetting of extracts initially intented for counteract or repair masculine hypofertility.
+> This draft article accompanies an ongoing (summer-fall 2024) series of N=1 clinical trials with the same patient on the topic of stage 1 testicular cancer curing or slow down attempt using food supplements, especially natural extracts, and more precisely the drug retargetting of extracts initially intented to counteract or repair masculine hypofertility.
 
 ## Abstract
 work in progress
