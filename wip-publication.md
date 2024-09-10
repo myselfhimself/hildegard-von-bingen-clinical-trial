@@ -1,4 +1,4 @@
-> [!TIP]
+je> [!TIP]
 > This draft article accompanies an ongoing series of N=1 clinical trials with the same patient on the topic of stage 1 testicular cancer curing or slow down attempt food supplements, especially natural extracts, and more precisely the drug retargetting of extracts initially intented for counteract or repair masculine hypofertility.
 
 ## Context
@@ -26,4 +26,4 @@ When contemplating both single or double orchiectomy, male patients are advised 
 
 [^1]: Fedder, M. D., Jakobsen, H. B., Giversen, I., Christensen, L. P., Parner, E. T., & Fedder, J. (2014). An extract of pomegranate fruit and galangal rhizome increases the numbers of motile sperm: a prospective, randomised, controlled, double-blinded trial. PloS one, 9(9), e108532. https://doi.org/10.1371/journal.pone.0108532
 [^2]: Laurence Rocher, Aïda Ksouri, Florian Maxwell, Bertrand Bresson, Ghina Hindawi, Cristina Balasa, Marie France Bellin, Laurence Albiges, Tumeurs testiculaires : les enjeux diagnostiques de l’imagerie, Bulletin du Cancer, Volume 106, Issue 10, 2019, Pages 875-886, ISSN 0007-4551, https://doi.org/10.1016/j.bulcan.2019.03.008. (https://www.sciencedirect.com/science/article/pii/S0007455119301596)
-[^3] Herranz-López, M.; Losada-Echeberría, M.; Barrajón-Catalán, E. The Multitarget Activity of Natural Extracts on Cancer: Synergy and Xenohormesis. Medicines 2019, 6, 6. https://doi.org/10.3390/medicines6010006
+[^3]: Herranz-López, M.; Losada-Echeberría, M.; Barrajón-Catalán, E. The Multitarget Activity of Natural Extracts on Cancer: Synergy and Xenohormesis. Medicines 2019, 6, 6. https://doi.org/10.3390/medicines6010006
