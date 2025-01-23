@@ -1,4 +1,4 @@
-/* Content automatically generated with grabLatestSheetData.js on Tue Nov 19 2024 17:05:39 GMT+0000 (Coordinated Universal Time).*/
+/* Content automatically generated with grabLatestSheetData.js on Thu Jan 23 2025 14:32:49 GMT+0000 (Coordinated Universal Time).*/
 /* Load this into your main JS file, it will provide a global 'sheetData' object variable with keys: 'serology', 'periods', 'events', 'refRanges'. */
 if(typeof sheetData == "undefined") {var sheetData = [];}
 /* Last blood-marker date: unknown */ sheetData["serology"] = [];
